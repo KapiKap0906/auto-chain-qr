@@ -1,47 +1,62 @@
 import cv2
 import pyzbar.pyzbar as pyzbar
+import sqlite3
+from datetime import datetime
 import time
+import threading
+from main import update_database, stackable_update_database
 
 #________________________________________________________________________________
 #   This code takes inputs from mutiple cameras and scans
 #   Use this one
 #________________________________________________________________________________
 
-import cv2
-import threading
-from main import update_database
+def is_stackable(product_id):
+    """Determines if a product is stackable based on its product ID."""
+    return product_id.startswith('C')
 
+def handle_scan(product_id, station_number):
+    """Handles the database update based on whether the product is stackable or not."""
+    if is_stackable(product_id):
+        # Prompt user to input the number of sacks for stackable items
+        try:
+            bags_in_stack = int(input(f"Enter the number of sacks in the stack for product {product_id}: "))
+            stackable_update_database(product_id, station_number, bags_in_stack)
+        except ValueError:
+            print("Invalid input. Please enter an integer for the number of sacks.")
+    else:
+        update_database(product_id, station_number)
+
+# Define each scanner function for respective stations
 def Scanner1(img):
     STATION_NUMBER = "1"
-
     decoded_id = pyzbar.decode(img)
 
     for code in decoded_id:
-        update_database(code.data.decode(), STATION_NUMBER)
-    
+        product_id = code.data.decode()
+        handle_scan(product_id, STATION_NUMBER)
+
     time.sleep(2)
 
 def Scanner2(img):
     STATION_NUMBER = "2"
-
     decoded_id = pyzbar.decode(img)
 
     for code in decoded_id:
-        update_database(code.data.decode(), STATION_NUMBER)
+        product_id = code.data.decode()
+        handle_scan(product_id, STATION_NUMBER)
 
     time.sleep(2)
-
 
 def Scanner3(img):
     STATION_NUMBER = "3"
-
     decoded_id = pyzbar.decode(img)
 
     for code in decoded_id:
-        update_database(code.data.decode(), STATION_NUMBER)
+        product_id = code.data.decode()
+        handle_scan(product_id, STATION_NUMBER)
 
     time.sleep(2)
-
 
 # Function to capture frames from each camera and pass to its Scanner function
 def capture_camera(cam_index, scanner_function):
@@ -80,4 +95,4 @@ if __name__ == "__main__":
     for thread in threads:
         thread.join()
 
-    cv2.destroyAllWindows()
+    cv2.destr

@@ -1,7 +1,3 @@
-import cv2
-import pyzbar.pyzbar as pyzbar
+from main import dispose_product
 
-img = cv2.imread('QR Codes\image4.png')
-decoded_id = pyzbar.decode(img)
-
-print(decoded_id[0].data.decode())
+dispose_product('C1001')

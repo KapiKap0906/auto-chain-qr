@@ -1,6 +1,6 @@
 import time
 import cv2
-from Scanner import Scanner1, Scanner2, Scanner3, DisposalScanner
+from dev.Scanner import Scanner1, Scanner2, Scanner3, DisposalScanner
 
 img = cv2.imread('QR Codes\image5.png')
 

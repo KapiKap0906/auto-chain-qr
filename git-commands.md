@@ -1,4 +1,3 @@
-Certainly! 
 Here’s a cheat sheet of essential Git commands for fetching, pushing, and managing a repository during development.
 This includes commands for basic setup, syncing changes, managing branches, and inspecting the repository status.
 
@@ -6,14 +5,14 @@ This includes commands for basic setup, syncing changes, managing branches, and 
 
 1. **Clone a Repository** (to fetch code from an existing GitHub repo):
    ```bash
-   git clone https://github.com/YourUsername/YourRepo.git
+   git clone https://github.com/KapiKap0906/auto-chain-qr.git
    ```
    This will create a local copy of the GitHub repository on your computer.
 
 2. **Initialize a New Repository** (if you don’t have a repo yet):
    ```bash
    git init
-   git remote add origin https://github.com/YourUsername/YourRepo.git
+   git remote add origin https://github.com/KapiKap0906/auto-chain-qr.git
    ```
 
 ### Committing and Pushing Changes
@@ -137,7 +136,7 @@ This includes commands for basic setup, syncing changes, managing branches, and 
 3. **Remove Remote and Re-add** (if you need to reset the connection to GitHub):
    ```bash
    git remote remove origin
-   git remote add origin https://github.com/YourUsername/YourRepo.git
+   git remote add origin https://github.com/KapiKap0906/auto-chain-qr.git
    ```
 
 These commands cover most tasks you’ll need for development with Git. Let me know if you need more specific details on any command!

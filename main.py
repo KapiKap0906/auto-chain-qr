@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+import time
 
 def initialize_database(db_file='products.db'):
     """Initializes the database with required columns."""
@@ -60,7 +61,7 @@ def update_database(product_id: str, station_number: str, db_file='products.db')
             VALUES (?, ?, ?, 1, 0, 0)
         ''', (product_id, station_number, current_time))
         conn.commit()
-
+    time.sleep(2)
     conn.close()
 
 def dispose_product(product_id: str, db_file='products.db'):
@@ -151,7 +152,21 @@ def stackable_update_database(product_id: str, station_number: str, bags_in_stac
             INSERT INTO product_tracking (product_id, station_number, in_time, live, stackable, bags_in_stack)
             VALUES (?, ?, ?, 1, 1, ?)
         ''', (product_id, station_number, current_time, bags_in_stack))
-    
     conn.commit()
+    time.sleep(2)
     conn.close()
  
+# Helper function to determine if a product is stackable
+def is_stackable(product_id):
+    return product_id.startswith('C')
+
+# Handles the database update based on whether the product is stackable or not
+def handle_scan(product_id, station_number):
+    if is_stackable(product_id):
+        try:
+            bags_in_stack = int(input(f"Enter the number of sacks in the stack for product {product_id}: "))
+            stackable_update_database(product_id, station_number, bags_in_stack)
+        except ValueError:
+            print("Invalid input. Please enter an integer for the number of sacks.")
+    else:
+        update_database(product_id, station_number)

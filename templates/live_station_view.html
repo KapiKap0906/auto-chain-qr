@@ -118,40 +118,72 @@
     <a href="/">Home</a>
     <a href="/live_station_view">Live Station View</a>
     <a href="/live_raw_material_view">Live Raw Material View</a>
+    <a href="/add_or_update_product">Add/Update Product</a>
+    <a href="/dispose_product">Dispose Product</a>
   </div>
+
 
   <div class="container">
     <h1>Live Station View</h1>
-    
-    {% for station, items in stations.items() %}
-    <h2>Station {{ station }}</h2>
+
+    <!-- Active Items Table -->
+    <h2>Active Items</h2>
     <div class="table-container">
       <table>
         <thead>
           <tr>
-            <th>Product ID</th>
-            <th>In Time</th>
-            <th>Out Time</th>
-            <th>Live</th>
+            <th>Station Number</th>
+            <th>Product Name</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {% for item in items %}
-          <tr>
-            <td>{{ item.product_id }}</td>
-            <td>{{ item.in_time }}</td>
-            <td>{{ item.out_time }}</td>
-            <td class="{{ 'status-true' if item.live else 'status-false' }}">
-              {{ 'Live' if item.live else 'Inactive' }}
-            </td>
-          </tr>
+          {% for station, items in active_stations.items() %}
+            <tr>
+              <td colspan="3"><strong>Station {{ station }}</strong></td>
+            </tr>
+            {% for item in items %}
+              <tr>
+                <td>{{ item.station_number }}</td>
+                <td>{{ item.product_name }}</td>
+                <td class="{{ 'status-true' if item.live else 'status-false' }}">
+                  {{ 'Live' if item.live else 'Inactive' }}</td>
+              </tr>
+            {% endfor %}
           {% endfor %}
         </tbody>
       </table>
     </div>
-    {% endfor %}
-    
+
+    <!-- Inactive Items Table -->
+    <h2>Inactive Items</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Station Number</th>
+            <th>Product Name</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for station, items in inactive_stations.items() %}
+            <tr>
+              <td colspan="3"><strong>Station {{ station }}</strong></td>
+            </tr>
+            {% for item in items %}
+              <tr>
+                <td>{{ item.station_number }}</td>
+                <td>{{ item.product_name }}</td>
+                <td class="{{ 'status-true' if item.live else 'status-false' }}">{{ 'Live' if item.live else 'Inactive' }}</td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
+
 
 </body>
 </html>

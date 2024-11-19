@@ -6,10 +6,10 @@ def initialize_database(db_file='products.db'):
     """Initializes the database with required columns."""
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
-    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS product_tracking (
-            product_id TEXT,
+            product_id TEXT PRIMARY KEY,
+            product_name TEXT,
             station_number TEXT,
             in_time DATETIME,
             out_time DATETIME,
@@ -60,6 +60,7 @@ def update_database(product_id: str, station_number: str, db_file='products.db')
             INSERT INTO product_tracking (product_id, station_number, in_time, live, stackable, bags_in_stack)
             VALUES (?, ?, ?, 1, 0, 0)
         ''', (product_id, station_number, current_time))
+        print()
         conn.commit()
     time.sleep(2)
     conn.close()
@@ -170,3 +171,48 @@ def handle_scan(product_id, station_number):
             print("Invalid input. Please enter an integer for the number of sacks.")
     else:
         update_database(product_id, station_number)
+
+
+def add_or_update_product(product_id: str, product_name: str, station_number: str, db_file='products.db'):
+    """Adds a new product or updates an existing one in the database."""
+    initialize_database(db_file)
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+    current_time = datetime.now()
+
+    cursor.execute('SELECT * FROM product_tracking WHERE product_id = ?', (product_id,))
+    product_exists = cursor.fetchone()
+
+    if not product_exists:
+        # Add the product if it doesn't exist
+        cursor.execute('''
+            INSERT INTO product_tracking (product_id, product_name, station_number, in_time, live, stackable, bags_in_stack)
+            VALUES (?, ?, ?, ?, 1, 0, 0)
+        ''', (product_id, product_name, station_number, current_time))
+        print(f"Product {product_name} with ID {product_id} added successfully.")
+    else:
+        # Update product's station and status if it already exists
+        cursor.execute('''
+            UPDATE product_tracking
+            SET station_number = ?, in_time = ?, live = 1
+            WHERE product_id = ?
+        ''', (station_number, current_time, product_id))
+        print(f"Product {product_name} with ID {product_id} updated successfully.")
+
+    conn.commit()
+    conn.close()
+
+def dispose_product(product_id: str, db_file='products.db'):
+    """Marks the product as disposed in the database."""
+    initialize_database(db_file)
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+    current_time = datetime.now()
+
+    cursor.execute('''
+        UPDATE product_tracking
+        SET out_time = ?, live = 0
+        WHERE product_id = ? AND live = 1
+    ''', (current_time, product_id))
+    conn.commit()
+    conn.close()

@@ -173,6 +173,8 @@
     <a href="/">Home</a>
     <a href="/live_station_view">Live Station View</a>
     <a href="/live_raw_material_view">Live Raw Material View</a>
+    <a href="/add_or_update_product">Add/Update Product</a>
+    <a href="/dispose_product">Dispose Product</a>
   </div>
 
   <div class="container">
@@ -181,10 +183,10 @@
     <!-- Dropdown for selecting raw material -->
     <div class="dropdown-container">
       <form method="GET" action="/live_raw_material_view">
-        <select name="selected_product_id" class="dropdown">
+        <select name="selected_product_name" class="dropdown">
           <option value="" disabled selected>Select a raw material</option>
-          {% for product_id in product_ids %}
-            <option value="{{ product_id }}" {% if product_id == raw_material %}selected{% endif %}>{{ product_id }}</option>
+          {% for product_name in product_names %}
+            <option value="{{ product_name }}" {% if product_name == raw_material %}selected{% endif %}>{{ product_name }}</option>
           {% endfor %}
         </select>
         <div class="button-container">
@@ -208,11 +210,11 @@
           </thead>
           <tbody>
             {% for entry in previous_entries %}
-              <tr class="{% if entry[4] %}status-true{% else %}status-false{% endif %}">
-                <td>{{ entry[1] }}</td>
+              <tr class="{% if entry[5] %}status-true{% else %}status-false{% endif %}">
                 <td>{{ entry[2] }}</td>
-                <td>{{ entry[3] if entry[3] else '-' }}</td>
-                <td>{{ 'Live' if entry[4] else 'Inactive' }}</td>
+                <td>{{ entry[3] }}</td>
+                <td>{{ entry[4] if entry[4] else '-' }}</td>
+                <td>{{ 'Live' if entry[5] else 'Inactive' }}</td>
               </tr>
             {% endfor %}
           </tbody>

@@ -1,7 +1,6 @@
 import cv2
 import pyzbar.pyzbar as pyzbar
 from main import handle_scan
-import time
 
 # Define each scanner function for respective stations
 def Scanner1(img):
@@ -26,7 +25,7 @@ def Scanner3(img):
         handle_scan(product_id, STATION_NUMBER)
 
 # Updated indices based on the index verification step
-cap1 = cv2.VideoCapture(0)  # Laptop webcam or external camera
+cap1 = cv2.VideoCapture(0)  # Laptop webcam
 cap2 = cv2.VideoCapture(1)  # First USB camera
 cap3 = cv2.VideoCapture(2)  # Second USB camera
 
